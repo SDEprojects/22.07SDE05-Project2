@@ -22,6 +22,7 @@ public class Controller {
   private Game game; // model, where the current state of the game is stored
   private final View view; // view, which is in charge of displaying (printing) game info
   private final BufferedReader reader; // buffered reader used to read in what user enters
+
   private String userInput; // variable used to save user input
 
   public Controller(Game game, View view, BufferedReader reader) {
@@ -29,6 +30,10 @@ public class Controller {
     this.view = view;
     this.reader = reader;
     this.userInput = "";
+  }
+
+  public String getUserInput() {
+    return userInput;
   }
 
   public void play() throws IOException {

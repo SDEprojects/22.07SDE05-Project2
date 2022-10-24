@@ -21,12 +21,24 @@ public class Main {
         Reader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
     ) {
-      Music.playMusic();
-      createNewGame();
-      View view = new View(); // View
-      Controller controller = new Controller(game, view, reader); // Controller
-      controller.play();
-    } catch (IOException | InvalidMidiDataException | MidiUnavailableException e) {
+     boolean continuePlaying = true;
+
+      while (continuePlaying) {
+        Music.playMusic();
+        createNewGame();
+        View view = new View(); // View
+        Controller controller = new Controller(game, view, reader); // Controller
+        controller.play();
+        //Prompt user if another game
+        controller.getUserInput("Turn & Burn! Would you like to play again?");
+        //Get user input
+
+        //If the input is n, chance continuePlaying to false
+        if (controller.getUserInput().equals("n")) {
+          continuePlaying = false;
+        }
+      }
+    } catch(IOException | InvalidMidiDataException | MidiUnavailableException e){
       throw new RuntimeException(e);
     }
   }
