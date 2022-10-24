@@ -2,7 +2,7 @@ package com.spacepilot;
 
 import com.google.gson.Gson;
 import com.spacepilot.controller.Controller;
-import com.spacepilot.model.Music;
+//import com.spacepilot.model.Music;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,8 +24,8 @@ public class Main {
      boolean continuePlaying = true;
 
       while (continuePlaying) {
-        Music.playMusic();
-        createNewGame();
+       // Music.playMusic();
+        Game game = createNewGame(); // Model
         View view = new View(); // View
         Controller controller = new Controller(game, view, reader); // Controller
         controller.play();
@@ -38,18 +38,18 @@ public class Main {
           continuePlaying = false;
         }
       }
-    } catch(IOException | InvalidMidiDataException | MidiUnavailableException e){
+    } catch(IOException  e){
       throw new RuntimeException(e);
     }
   }
 
-  public static void createNewGame() {
+  public static Game createNewGame() {
     // create a reader
     try (Reader reader = new InputStreamReader(
-        Main.class.getResourceAsStream("/new-game-data.json"))
+        Main.class.getResourceAsStream("new-game-data.json"))
     ) {
       // convert JSON file to Game
-      game = new Gson().fromJson(reader, Game.class);
+      return new Gson().fromJson(reader, Game.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

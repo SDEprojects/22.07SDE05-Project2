@@ -2,14 +2,12 @@ package com.spacepilot.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.spacepilot.model.Planet;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import com.spacepilot.model.Engineer;
 import com.spacepilot.model.Game;
@@ -19,17 +17,17 @@ import com.spacepilot.view.View;
 
 public class Controller {
 
-  private Game game; // model, where the current state of the game is stored
   private final View view; // view, which is in charge of displaying (printing) game info
   private final BufferedReader reader; // buffered reader used to read in what user enters
 
   private String userInput; // variable used to save user input
+  private Game game; // model, where the current state of the game is stored
 
   public Controller(Game game, View view, BufferedReader reader) {
+    this.userInput = "";
     this.game = game;
     this.view = view;
     this.reader = reader;
-    this.userInput = "";
   }
 
   public String getUserInput() {
@@ -38,13 +36,12 @@ public class Controller {
 
   public void play() throws IOException {
     // set up game environment (placing random number of astronauts, etc)
-    setUpGame();
-    // display game's introduction with flash screen and story and prompt the user to continue
+    setUp();
+    // display game's introduction with flash screen and story
     gameIntro();
-    // while game is not over, allow the user to continue to play
-    while (!game.isOver()) {
+    while (!game.isOver()) { // While game is not over
       // print current game info
-      displayGameState();
+      updateView();
       // prompt the user to enter their next command (saved as userInput)
       getUserInput("Please enter your next command");
       // parse the user input to get their command (verb and noun)
@@ -54,8 +51,9 @@ public class Controller {
     }
   }
 
-  public void setUpGame() {
+  public void setUp() {
     // place random number of astronauts on each planet
+<<<<<<< .merge_file_vR5dnK
     for (Planet planet : game.getPlanets()) {
       planet.placeAstronauts(planet);
     }
@@ -64,6 +62,11 @@ public class Controller {
     game.setSpacecraft(new Spacecraft());
     // set the current spacecraft's current planet to be Earth
     game.getSpacecraft().setCurrentPlanet(returnPlanet("earth"));
+=======
+    game.getMoon().placeAstronauts(game.getMoon());
+    game.getMars().placeAstronauts(game.getMars());
+    game.getMercury().placeAstronauts(game.getMercury());
+>>>>>>> .merge_file_5PPMnB
   }
 
   public void gameIntro() throws IOException {
@@ -93,17 +96,20 @@ public class Controller {
     } else if (command[0].equals("help")) {
       view.printInstructions();
 
-    } else if (command[0].equals("save")) {
-      saveGame(game);
+// TODO: save and continue broken with the lastest change
 
-    } else if (command[0].equals("continue")) {
-      loadSavedGame();
+//    } else if (command[0].equals("save")) {
+//      saveGame(game);
+
+//    } else if (command[0].equals("continue")) {
+//      loadSavedGame();
 
     } else if (command[0].equals("go")) {
       // if the user is trying to go to the current planet
       if (command[1].equals(game.getSpacecraft().getCurrentPlanet().getName())) {
         View.printSamePlanetAlert();
       } else {
+<<<<<<< .merge_file_vR5dnK
         Planet destinationPlanet = returnPlanet(command[1]);
         String event = destinationPlanet.randomEncounter();
         Spacecraft SR22T = game.getSpacecraft();
@@ -114,6 +120,9 @@ public class Controller {
           view.printEventAlert(event);
         }
         SR22T.setCurrentPlanet(returnPlanet(command[1]));
+=======
+        moveSpacecraft(command[1]);
+>>>>>>> .merge_file_5PPMnB
         // decrement remaining days by 1 when user goes somewhere
         game.setRemainingDays(game.getRemainingDays() - 1);
       }
@@ -134,6 +143,7 @@ public class Controller {
         return;
       }
       Engineer.repairSpacecraft(game.getSpacecraft());
+      game.setShipHealth(game.getSpacecraft().getHealth());
 
     } else if (command[0].equals("load")) {
       loadNewPassengers();
@@ -163,14 +173,26 @@ public class Controller {
   }
 
   public void unloadPassengersOnEarth() {
-    Planet currentPlanet = game.getSpacecraft().getCurrentPlanet();
-    Spacecraft spacecraft = game.getSpacecraft();
+    // TODO: Move these print line statements to View after debugging
+    Spacecraft bermoona = game.getSpacecraft();
+    if (bermoona.getCurrentPlanet().getName().equals("Earth")) {
+      System.out.println(
+          "bermoona psngr array size before unloading: " + bermoona.getPassengers().size());
+      game.getEarth().getArrayOfAstronautsOnPlanet().addAll(bermoona.getPassengers());
+      System.out.println("Earth passenger array size after spacecraft unloaded: " + game.getEarth()
+          .getArrayOfAstronautsOnPlanet().size());
+      bermoona.getPassengers().clear();
+      System.out.println(
+          "bermoona psngr array size after cleared: " + bermoona.getPassengers().size());
 
+<<<<<<< .merge_file_vR5dnK
     if (currentPlanet.getName().equals("Earth")) {
       currentPlanet.getArrayOfAstronautsOnPlanet().addAll(game.getSpacecraft().getPassengers());
       spacecraft.getPassengers().clear();
       determineIfUserWinsOrLoses();
       game.setOver(true);
+=======
+>>>>>>> .merge_file_5PPMnB
     } else {
       View.printYouCantUnloadPassengersIfCurrentPlanetNotEarth();
     }
@@ -187,6 +209,24 @@ public class Controller {
     } else {
       View.printGameOverMessage(false);
     }
+
+  }
+
+  public void moveSpacecraft(String destination) {
+    switch (destination) {
+      case "moon":
+        game.getSpacecraft().setCurrentPlanet(game.getMoon());
+        break;
+      case "mars":
+        game.getSpacecraft().setCurrentPlanet(game.getMars());
+        break;
+      case "mercury":
+        game.getSpacecraft().setCurrentPlanet(game.getMercury());
+        break;
+      case "earth":
+        game.getSpacecraft().setCurrentPlanet(game.getEarth());
+        break;
+    }
   }
 
   public void getUserInput(String prompt) throws IOException {
@@ -198,11 +238,28 @@ public class Controller {
     userInput = reader.readLine().trim().toLowerCase();
   }
 
+<<<<<<< .merge_file_vR5dnK
   public void displayGameState() {
     view.printGameState(game.calculateRemainingAstronautsViaTotalNumOfAstronauts(),
         game.getRemainingDays(),
         game.getSpacecraft().getHealth(), game.getSpacecraft().getCurrentPlanet().getName(),
         game.getSpacecraft().getPassengers().size());
+=======
+  public void updateView() {
+    view.printGameState(game.getRemainingAstronauts(), game.getRemainingDays(),
+        game.getShipHealth(),
+        game.getSpacecraft().getCurrentPlanet().getName());
+  }
+
+  private static String[] textParser(String text) {
+    String[] result = new String[2];
+    String[] splitText = text.split(" ");
+    String verb = splitText[0]; // First word
+    String noun = splitText[splitText.length - 1]; // Last word
+    result[0] = verb;
+    result[1] = noun;
+    return result;
+>>>>>>> .merge_file_5PPMnB
   }
 
   public void loadSavedGame() {
@@ -228,6 +285,7 @@ public class Controller {
     View.printSaveGameMessage();
   }
 
+<<<<<<< .merge_file_vR5dnK
   /*
   HELPER METHODS
    */
@@ -251,4 +309,6 @@ public class Controller {
 
 
 
+=======
+>>>>>>> .merge_file_5PPMnB
 }

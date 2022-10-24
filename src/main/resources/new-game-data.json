@@ -1,21 +1,16 @@
 {
   "isOver": false,
   "remainingDays": 10,
+  "shipHealth": 3,
   "spacecraft": {
     "name": "Bermoona Triangle",
     "health": 2,
     "currentPlanet": {
       "name": "Earth",
-      "event": "WW III",
+      "event": "WWIII",
       "gravity": 9,
       "radius": 6300,
       "mass": 100,
-      "names": [
-        "Bob",
-        "Michelle",
-        "Chad",
-        "Aria"
-      ],
       "arrayOfAstronautsOnPlanet": []
     },
     "passengers": [],
@@ -23,6 +18,7 @@
     "numOfNonEngineersOnBoard": 0,
     "totalPassengers": 0
   },
+<<<<<<< .merge_file_L8OjCZ
   "totalNumberOfAstronauts" : 0,
   "planets": [
     {
@@ -82,4 +78,42 @@
       "arrayOfAstronautsOnPlanet": []
     }
   ]
+=======
+  "earth": {
+    "name": "Earth",
+    "event": "WWIII",
+    "gravity": 9,
+    "radius": 6300,
+    "mass": 100,
+    "names": ["Bob", "Michelle", "Chad", "Aria"],
+    "arrayOfAstronautsOnPlanet": []
+  },
+  "moon": {
+    "name": "Moon",
+    "event": "asteroid",
+    "gravity": 2,
+    "radius": 1000,
+    "mass": 1,
+    "names": ["Bob", "Michelle", "Chad", "Aria"],
+    "arrayOfAstronautsOnPlanet": []
+  },
+  "mars": {
+    "name": "Mars",
+    "event": "sand storm",
+    "gravity": 4,
+    "radius": 2100,
+    "mass": 10,
+    "names": ["Bob", "Michelle", "Chad", "Aria"],
+    "arrayOfAstronautsOnPlanet": []
+  },
+  "mercury": {
+    "name": "Mercury",
+    "event": "solar flare",
+    "gravity": 4,
+    "radius": 1500,
+    "mass": 5,
+    "names": ["Bob", "Michelle", "Chad", "Aria"],
+    "arrayOfAstronautsOnPlanet": []
+  }
+>>>>>>> .merge_file_xHDpNs
 }
